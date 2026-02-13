@@ -5,8 +5,10 @@ import (
 	"fmt"
 
 	"github.com/kartFr/Asset-Reuploader/internal/app/assets/animation"
+	"github.com/kartFr/Asset-Reuploader/internal/app/assets/mesh"
 	"github.com/kartFr/Asset-Reuploader/internal/app/assets/shared/clientutils"
 	"github.com/kartFr/Asset-Reuploader/internal/app/assets/shared/permissions"
+	"github.com/kartFr/Asset-Reuploader/internal/app/assets/sound"
 	"github.com/kartFr/Asset-Reuploader/internal/app/context"
 	"github.com/kartFr/Asset-Reuploader/internal/app/request"
 	"github.com/kartFr/Asset-Reuploader/internal/app/response"
