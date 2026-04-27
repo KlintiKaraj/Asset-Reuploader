@@ -20,7 +20,7 @@ import (
 	"github.com/kartFr/Asset-Reuploader/internal/roblox/assetdelivery"
 	"github.com/kartFr/Asset-Reuploader/internal/roblox/develop"
 	"github.com/kartFr/Asset-Reuploader/internal/roblox/games"
-	"github.com/kartFr/Asset-Reuploader/internal/roblox/ide"
+	"github.com/kartFr/Asset-Reuploader/internal/roblox/opencloud"
 	"github.com/kartFr/Asset-Reuploader/internal/shardedmap"
 	"github.com/kartFr/Asset-Reuploader/internal/taskqueue"
 )
@@ -106,7 +106,7 @@ func Reupload(ctx *context.Context, r *request.Request) {
 			return
 		}
 
-		uploadHandler, err := ide.NewUploadAnimationHandler(client, assetInfo.Name, "", assetData, groupID)
+		uploadHandler, err := opencloud.NewUploadAnimationHandler(client, assetInfo.Name, "", assetData, groupID)
 		if err != nil {
 			newUploadError("Failed to get upload handler", assetInfo, err)
 			return
@@ -127,9 +127,9 @@ func Reupload(ctx *context.Context, r *request.Request) {
 					}
 
 					switch err {
-					case ide.UploadAnimationErrors.ErrNotLoggedIn:
-						clientutils.GetNewCookie(ctx, r, "cookie expired")
-					case ide.UploadAnimationErrors.ErrInappropriateName:
+					case opencloud.UploadAnimationErrors.ErrNotAuthenticated, opencloud.UploadAnimationErrors.ErrInvalidAPIKey:
+						clientutils.GetNewAPIKey(ctx, "api key invalid or expired")
+					case opencloud.UploadAnimationErrors.ErrInappropriateName:
 						assetInfo.Name = fmt.Sprintf("(%s) [Censored]", assetInfo.Name)
 					default:
 						switch err.(type) {
