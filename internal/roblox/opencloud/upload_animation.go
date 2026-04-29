@@ -17,15 +17,17 @@ import (
 const assetsURL = "https://apis.roblox.com/assets/v1/assets"
 
 var UploadAnimationErrors = struct {
-	ErrNotAuthenticated error
-	ErrInvalidAPIKey    error
-	ErrInappropriateName error
+	ErrNotAuthenticated    error
+	ErrInvalidAPIKey       error
+	ErrInappropriateName   error
 	ErrAssetTypeNotEnabled error
+	ErrRateLimited         error
 }{
 	ErrNotAuthenticated:    errors.New("not authenticated"),
 	ErrInvalidAPIKey:       errors.New("invalid api key"),
-	ErrInappropriateName:  errors.New("inappropriate name or description"),
+	ErrInappropriateName:   errors.New("inappropriate name or description"),
 	ErrAssetTypeNotEnabled: errors.New("asset type not enabled for this api key"),
+	ErrRateLimited:         errors.New("rate limited by api"),
 }
 
 type createAssetRequest struct {
@@ -183,6 +185,8 @@ func NewUploadAnimationHandler(
 				return 0, err
 			}
 			return assetID, nil
+		case http.StatusTooManyRequests:
+			return 0, UploadAnimationErrors.ErrRateLimited
 		case http.StatusForbidden, http.StatusUnauthorized:
 			var errResp errorResponse
 			if jsonErr := json.Unmarshal(respBody, &errResp); jsonErr == nil {

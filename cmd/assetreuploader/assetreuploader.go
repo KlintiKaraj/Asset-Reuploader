@@ -14,9 +14,9 @@ import (
 )
 
 var (
-	cookieFile  = config.Get("cookie_file")
-	apiKeyFile  = config.Get("api_key_file")
-	port        = config.Get("port")
+	cookieFile = config.Get("cookie_file")
+	apiKeyFile = config.Get("api_key_file")
+	port       = config.Get("port")
 )
 
 func main() {
@@ -61,7 +61,10 @@ func main() {
 		color.Error.Println("Failed to save api key: ", err)
 	}
 
-	fmt.Println("localhost started on port " + port + ". Waiting to start reuploading.")
+	color.Orange.Println("Asset-Reuploader made by Kartfr, Modified by Klinti Karaj (funnyfreak228)")
+	color.Success.Println("localhost = true (port " + port + ")")
+	fmt.Println("Failed uploads will be automatically retried.")
+
 	if err := serve(c); err != nil {
 		log.Fatal(err)
 	}
